@@ -58,9 +58,10 @@ app.use(function(err, req, res, next) {
 var mongoose = require('mongoose');
 var bluebird = require('bluebird');
 mongoose.Promise = bluebird;
-mongoose.connect('mongodb://127.0.0.1:27017/todoapp')
-.then(()=> { console.log(`Succesfully Connected to the Mongodb Database  at URL : mongodb://127.0.0.1:27017/todoapp`)})
-.catch((err)=> { console.log(`Error Connecting to the Mongodb Database at URL : mongodb://127.0.0.1:27017/todoapp \n` + err)});
+var mongoDB = `mongodb://127.0.0.1:27017/todoapp`;
+mongoose.connect(mongoDB)
+.then(()=> { console.log(`Succesfully Connected to the Mongodb Database  at URL : ` + mongoDB)})
+.catch((err)=> { console.log(`Error Connecting to the Mongodb Database at URL : ` + mongoDB +  `\n` + err)});
 
 /**
  *  COR handling
