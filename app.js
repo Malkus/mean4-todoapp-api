@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+//API Route
+var api = require('./routes/api.route');
 
 var app = express();
 
@@ -25,6 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 
+//Use API Routes
+app.use('/api', api);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
@@ -41,6 +46,30 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+//////////
+///Custom
+//////////
+
+/**
+ *  Start Mongo with Mongoose
+ */
+var mongoose = require('mongoose');
+var bluebird = require('bluebird');
+mongoose.Promise = bluebird;
+mongoose.connect('mongodb://127.0.0.1:27017/todoapp')
+.then(()=> { console.log(`Succesfully Connected to the Mongodb Database  at URL : mongodb://127.0.0.1:27017/todoapp`)})
+.catch((err)=> { console.log(`Error Connecting to the Mongodb Database at URL : mongodb://127.0.0.1:27017/todoapp \n` + err)});
+
+/**
+ *  COR handling
+ */
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  next();
 });
 
 module.exports = app;
